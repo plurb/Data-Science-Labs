@@ -108,49 +108,55 @@ def update_input_container(selected_statistics):
     ]
 )
 def update_output_container(stat_type: str, year):
+    global recession_data
     if stat_type == 'Recession Period Statistics':
         # Filter the data for recession periods
         recession_data = data[data['Recession'] == 1]
 
         # Plot 1 Automobile sales fluctuate over Recession Period (year wise) using line chart
+
         # grouping data for plotting
-        yearly_rec = recession_data.groupby('Year')['Automobile_Sales'].mean().reset_index()
+        yearly_rec: pd.DataFrame | None = recession_data.groupby('Year')['Automobile_Sales'].mean().reset_index()
+
+        # error handling
+        assert yearly_rec is not None
+
         # Plotting the line graph
         R_chart1 = dcc.Graph(
             figure=px.line(
                 yearly_rec,
-                x='........',
-                y='........',
-                title="........"
+                x=yearly_rec["Year"],
+                y=yearly_rec["Automobile_Sales"],
+                title="Sales During Recession Period"
             )
         )
 
-    # Plot 2 Calculate the average number of vehicles sold by vehicle type and represent as a Bar chart
-    # ...
+        # Plot 2 Calculate the average number of vehicles sold by vehicle type and represent as a Bar chart
+        # ...
 
-    # Plot 3 : Pie chart for total expenditure share by vehicle type during recessions
-    # grouping data for plotting
-    exp_rec = recession_data.groupby(None)
-    R_chart3 = dcc.Graph(
-        figure=px.pie(None, values='............', names='..........', title="............")
-    )
+        # Plot 3 : Pie chart for total expenditure share by vehicle type during recessions
+        # grouping data for plotting
+        exp_rec = recession_data.groupby('Year')
+        R_chart3 = dcc.Graph(
+            figure=px.pie(None, values='............', names='..........', title="............")
+        )
 
-    # Plot 4 Develop a Bar chart for the effect of unemployment rate on vehicle type and sales
-    # ...
+        # Plot 4 Develop a Bar chart for the effect of unemployment rate on vehicle type and sales
+        # ...
 
     return [
         html.Div(
             className='chart-item',
             children=[
-                html.Div(children=""),
-                html.Div(children="")
+                html.Div(children=[]),
+                html.Div(children=[])
             ]
         ),
         html.Div(
             className='chart-item',
             children=[
-                html.Div(children="......"),
-                html.Div(children="......")
+                html.Div(children=[]),
+                html.Div(children=[])
             ]
         )
     ]
